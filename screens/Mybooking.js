@@ -9,7 +9,8 @@ import {
   FlatList,
   ActivityIndicator,
   Dimensions,
-  RefreshControl
+  RefreshControl,
+  SafeAreaView
 } from 'react-native';
 import BottomNavigation from './Components/BottomNavigation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -19,7 +20,7 @@ import { StorageContext } from '../contexts/StorageContext';
 import CustomText from './Components/CustomText';
 import CustomCancelAlert from './Components/CustomCancelAlert';
 
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 const Mybooking = ({ navigation }) => {
   const insets = useSafeAreaInsets();
@@ -31,6 +32,9 @@ const Mybooking = ({ navigation }) => {
   const [showCancelAlert, setShowCancelAlert] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+
+  // Calculate dynamic header height based on device
+  const headerHeight = Math.max(height * 0.10, 80); // Ensure minimum height
 
   // Check login status and redirect if not logged in
   useEffect(() => {
@@ -201,6 +205,17 @@ const Mybooking = ({ navigation }) => {
     </View>
   );
 
+  // Render empty state
+  const renderEmptyState = (message) => (
+    <View style={styles.emptyStateContainer}>
+      <CustomText style={styles.emptyTitle}>No Bookings Found</CustomText>
+      <CustomText style={styles.emptyText}>{message || 'There are no bookings listed at the moment. Keep track of your bookings here.'}</CustomText>
+      <TouchableOpacity style={styles.reloadButton} onPress={handleReload}>
+        <CustomText style={styles.reloadButtonText}>Reload</CustomText>
+      </TouchableOpacity>
+    </View>
+  );
+
   // Render each booking item
   const renderBookingItem = ({ item }) => (
     <TouchableOpacity
@@ -258,113 +273,87 @@ const Mybooking = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#000" />
-      <View style={[styles.header, { paddingTop: Platform.OS === 'ios' ? insets.top : 10 }]}>
-        <CustomText style={styles.headerTitle}>My Booking</CustomText>
-      </View>
-      <View style={styles.content}>
-        {isLoading ? (
-          renderSkeletonList()
-        ) : error ? (
-          <View style={styles.emptyState}>
-            <View style={styles.emptyIconContainer}>
-              <View style={styles.documentIcon}>
-                <View style={styles.documentContent}>
-                  <View style={styles.documentLine1} />
-                  <View style={styles.documentLineGroup}>
-                    <View style={styles.documentLine2} />
-                    <View style={styles.documentLine2} />
-                  </View>
-                  <View style={styles.documentLineGroup}>
-                    <View style={styles.documentLine3} />
-                    <View style={styles.documentLine3} />
-                  </View>
-                </View>
-              </View>
-              <View style={styles.magnifierContainer}>
-                <View style={styles.magnifierCircle}>
-                  <View style={styles.magnifierHandle} />
-                </View>
-              </View>
-            </View>
-            <CustomText style={styles.emptyTitle}>No Bookings Found</CustomText>
-            <CustomText style={styles.emptyText}>{error}</CustomText>
-            <TouchableOpacity style={styles.reloadButton} onPress={handleReload}>
-              <CustomText style={styles.reloadButtonText}>Reload</CustomText>
-            </TouchableOpacity>
-          </View>
-        ) : bookingData.length === 0 ? (
-          <View style={styles.emptyState}>
-            <View style={styles.emptyIconContainer}>
-              <View style={styles.documentIcon}>
-                <View style={styles.documentContent}>
-                  <View style={styles.documentLine1} />
-                  <View style={styles.documentLineGroup}>
-                    <View style={styles.documentLine2} />
-                    <View style={styles.documentLine2} />
-                  </View>
-                  <View style={styles.documentLineGroup}>
-                    <View style={styles.documentLine3} />
-                    <View style={styles.documentLine3} />
-                  </View>
-                </View>
-              </View>
-              <View style={styles.magnifierContainer}>
-                <View style={styles.magnifierCircle}>
-                  <View style={styles.magnifierHandle} />
-                </View>
-              </View>
-            </View>
-            <CustomText style={styles.emptyTitle}>No Bookings Found</CustomText>
-            <CustomText style={styles.emptyText}>There are no bookings listed at the moment. Keep track of your bookings here.</CustomText>
-            <TouchableOpacity style={styles.reloadButton} onPress={handleReload}>
-              <CustomText style={styles.reloadButtonText}>Reload</CustomText>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <FlatList
-            data={bookingData}
-            renderItem={renderBookingItem}
-            keyExtractor={item => item.id}
-            contentContainerStyle={{ padding: 15, paddingBottom: 60 * 2 }}
-            ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
-            showsVerticalScrollIndicator={false}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                colors={['#6B31B7']}
-                tintColor="#6B31B7"
-              />
-            }
+  // Render main content
+  const renderContent = () => {
+    if (isLoading) {
+      return renderSkeletonList();
+    }
+    
+    if (error) {
+      return renderEmptyState(error);
+    }
+    
+    if (bookingData.length === 0) {
+      return renderEmptyState();
+    }
+    
+    return (
+      <FlatList
+        data={bookingData}
+        renderItem={renderBookingItem}
+        keyExtractor={item => item.id}
+        contentContainerStyle={{ padding: 15, paddingBottom: 60 * 2 }}
+        ItemSeparatorComponent={() => <View style={{ height: 15 }} />}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#6B31B7']}
+            tintColor="#6B31B7"
           />
-        )}
-      </View>
-      <CustomCancelAlert
-        visible={showCancelAlert}
-        onClose={() => setShowCancelAlert(false)}
-        onConfirm={handleCancelBooking}
-        bookingId={selectedBookingId}
+        }
       />
-      <BottomNavigation page='My Booking' />
-    </View>
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="#000" />
+        
+        {/* Dynamic Header */}
+        <View 
+          style={[
+            styles.header, 
+            { 
+              height: headerHeight,
+              paddingTop: Platform.OS === 'ios' ? Math.max(insets.top, 10) : 10
+            }
+          ]}
+        >
+          <View style={styles.headerInner}>
+            <CustomText style={styles.headerTitle}>My Booking</CustomText>
+          </View>
+        </View>
+        
+        <View style={styles.content}>
+          {renderContent()}
+        </View>
+        
+        <CustomCancelAlert
+          visible={showCancelAlert}
+          onClose={() => setShowCancelAlert(false)}
+          onConfirm={handleCancelBooking}
+          bookingId={selectedBookingId}
+        />
+        
+        <BottomNavigation page='My Booking' />
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
   container: {
     flex: 1,
     backgroundColor: '#f0f0f0',
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    paddingBottom: 20,
-    height: height * 0.11,
     backgroundColor: '#000',
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
@@ -374,18 +363,30 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
+    justifyContent: 'flex-end', // Align content to bottom
+    paddingBottom: 15,
+  },
+  headerInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
   headerTitle: {
     fontSize: 18,
     color: '#fff',
-    flex: 1,
     textAlign: 'center',
     fontFamily: 'Nunito_800ExtraBold',
-    marginTop: 27,
   },
   content: {
     flex: 1,
     backgroundColor: '#f0f0f0',
+  },
+  emptyStateContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginTop: 200
   },
   bookingCard: {
     backgroundColor: '#FFFFFF',
@@ -574,12 +575,6 @@ const styles = StyleSheet.create({
     color: '#333',
     fontFamily: 'Nunito_400Regular',
   },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
   emptyIconContainer: {
     width: 120,
     height: 120,
@@ -658,6 +653,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     marginBottom: 30,
     fontFamily: 'Nunito_400Regular',
+    paddingHorizontal: 20,
   },
   reloadButton: {
     backgroundColor: '#000',

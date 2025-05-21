@@ -20,6 +20,7 @@ import { StorageContext } from '../contexts/StorageContext';
 import BottomNavigation from './Components/BottomNavigation';
 import Constants from 'expo-constants';
 import { useWindowDimensions } from 'react-native';
+import CustomText from './Components/CustomText'; // Make sure to import CustomText
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const version = Constants.expoConfig?.version || 'N/A';
@@ -107,12 +108,12 @@ export default function User({ navigation }) {
                     />
                 </View>
                 <View style={styles.optionTextContainer}>
-                    <Text style={styles.optionTitle}>
+                    <CustomText style={styles.optionTitle}>
                         {title}
-                    </Text>
-                    <Text style={styles.optionDescription}>
+                    </CustomText>
+                    <CustomText style={styles.optionDescription}>
                         {subtitle}
-                    </Text>
+                    </CustomText>
                 </View>
             </TouchableOpacity>
         );
@@ -134,7 +135,7 @@ export default function User({ navigation }) {
                     }
                 ]}
             >
-                <Text style={[styles.headerTitle, { fontSize: headerTitleSize }]}>Profile</Text>
+                <CustomText style={[styles.headerTitle, { fontSize: headerTitleSize }]}>Profile</CustomText>
 
                 {userDetail && (
                     <View style={styles.profileContainer}>
@@ -157,10 +158,10 @@ export default function User({ navigation }) {
                                 <Ionicons name="pencil" size={isSmallDevice ? 12 : 14} color="#000" />
                             </TouchableOpacity>
                         </View>
-                        <Text style={[styles.userName, { fontSize: isSmallDevice ? 16 : 18 }]}>
+                        <CustomText style={[styles.userName, { fontSize: isSmallDevice ? 16 : 18 }]}>
                             {userDetail?.first_name} {userDetail?.last_name}
-                        </Text>
-                        <Text style={styles.userEmail}>{userDetail?.email}</Text>
+                        </CustomText>
+                        <CustomText style={styles.userEmail}>{userDetail?.email}</CustomText>
                     </View>
                 )}
             </View>
@@ -206,7 +207,7 @@ export default function User({ navigation }) {
 
                 {/* App Version */}
                 <View style={styles.versionContainer}>
-                    <Text style={styles.versionText}>v{version}</Text>
+                    <CustomText style={styles.versionText}>v{version}</CustomText>
                 </View>
             </ScrollView>
 
@@ -233,11 +234,11 @@ export default function User({ navigation }) {
                             onPress={(e) => e.stopPropagation()}
                         >
                             <View style={styles.modalContainer}>
-                                <Text style={styles.modalTitle}>Oh No, You Are Leaving!</Text>
-                                <Text style={styles.modalText}>Do you want to logout?</Text>
+                                <CustomText style={styles.modalTitle}>Oh No, You Are Leaving!</CustomText>
+                                <CustomText style={styles.modalText}>Do you want to logout?</CustomText>
 
                                 {logoutError && (
-                                    <Text style={styles.errorText}>{logoutError}</Text>
+                                    <CustomText style={styles.errorText}>{logoutError}</CustomText>
                                 )}
 
                                 <View style={styles.buttonContainer}>
@@ -246,7 +247,7 @@ export default function User({ navigation }) {
                                         onPress={hideLogoutModal}
                                         disabled={isLoggingOut}
                                     >
-                                        <Text style={styles.noButtonText}>No</Text>
+                                        <CustomText style={styles.noButtonText}>No</CustomText>
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
@@ -257,7 +258,7 @@ export default function User({ navigation }) {
                                         {isLoggingOut ? (
                                             <ActivityIndicator size="small" color="#FFF" />
                                         ) : (
-                                            <Text style={styles.yesButtonText}>Yes</Text>
+                                            <CustomText style={styles.yesButtonText}>Yes</CustomText>
                                         )}
                                     </TouchableOpacity>
                                 </View>
@@ -287,7 +288,8 @@ const styles = StyleSheet.create({
     headerTitle: {
         color: '#fff',
         marginBottom: 20,
-        fontWeight: 'bold',
+        fontFamily: 'Nunito_800ExtraBold',
+        textAlign: 'center',
     },
     profileContainer: {
         alignItems: 'center',
@@ -306,7 +308,7 @@ const styles = StyleSheet.create({
     loginButtonText: {
         color: '#FFF',
         fontSize: 16,
-        fontWeight: 'bold',
+        fontFamily: 'Nunito_600SemiBold',
     },
     avatar: {
         backgroundColor: '#E0E0E0',
@@ -328,11 +330,14 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         marginBottom: 5,
         marginTop: 13,
-        fontWeight: 'bold',
+        fontFamily: 'Nunito_700Bold',
+        textAlign: 'center',
     },
     userEmail: {
         fontSize: 13,
         color: '#AAAAAA',
+        fontFamily: 'Nunito_400Regular',
+        textAlign: 'center',
     },
     content: {
         flex: 1,
@@ -365,11 +370,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#333333',
         marginBottom: 3,
-        fontWeight: 'bold',
+        fontFamily: 'Nunito_600SemiBold',
     },
     optionDescription: {
         fontSize: 12,
         color: '#888888',
+        fontFamily: 'Nunito_400Regular',
     },
     versionContainer: {
         alignItems: 'center',
@@ -378,6 +384,7 @@ const styles = StyleSheet.create({
     versionText: {
         fontSize: 14,
         color: '#888888',
+        fontFamily: 'Nunito_400Regular',
     },
     modalOverlay: {
         flex: 1,
@@ -404,19 +411,21 @@ const styles = StyleSheet.create({
         color: '#333',
         marginBottom: 12,
         textAlign: 'center',
-        fontWeight: 'bold',
+        fontFamily: 'Nunito_700Bold',
     },
     modalText: {
         fontSize: 14,
         color: '#666',
         marginBottom: 24,
         textAlign: 'center',
+        fontFamily: 'Nunito_400Regular',
     },
     errorText: {
         color: '#FF3B30',
         fontSize: 14,
         marginBottom: 15,
         textAlign: 'center',
+        fontFamily: 'Nunito_500Medium',
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -446,11 +455,11 @@ const styles = StyleSheet.create({
     noButtonText: {
         color: '#333',
         fontSize: 15,
-        fontWeight: 'bold',
+        fontFamily: 'Nunito_600SemiBold',
     },
     yesButtonText: {
         color: '#FFF',
         fontSize: 15,
-        fontWeight: 'bold',
+        fontFamily: 'Nunito_600SemiBold',
     },
 });

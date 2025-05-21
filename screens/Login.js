@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   scrollView: {
     flex: 1,
@@ -388,11 +388,12 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 8,
     marginTop: -10,
-    fontWeight: '700',
+    fontFamily: 'Nunito_700Bold', // Updated with fontFamily
   },
   subtitleText: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#666',
+    fontFamily: 'Nunito_400Regular', // Updated with fontFamily
   },
   formContainer: {
     width: '100%',
@@ -410,7 +411,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     backgroundColor: '#fff',
     color: '#333',
-    fontWeight: '600',
+    fontFamily: 'Nunito_600SemiBold', // Updated with fontFamily
   },
   inputError: {
     borderColor: 'red',
@@ -420,6 +421,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     marginLeft: 5,
+    fontFamily: 'Nunito_400Regular', // Updated with fontFamily
   },
   generalError: {
     textAlign: 'center',
@@ -441,7 +443,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 1,
     color: '#333',
-    fontWeight: '600',
+    fontFamily: 'Nunito_600SemiBold', // Updated with fontFamily
   },
   visibilityIcon: {
     padding: 10,
@@ -451,7 +453,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 30,
-    marginTop: 15
+    marginTop: 15,
   },
   rememberMeContainer: {
     flexDirection: 'row',
@@ -478,20 +480,20 @@ const styles = StyleSheet.create({
     color: '#666',
     fontSize: 12,
     letterSpacing: 1,
-    fontWeight: '600',
+    fontFamily: 'Nunito_600SemiBold', // Updated with fontFamily
   },
   forgotPasswordText: {
     fontSize: 12,
     color: '#666',
     letterSpacing: 1,
-    fontWeight: '600',
+    fontFamily: 'Nunito_600SemiBold', // Updated with fontFamily
     textDecorationLine: 'underline',
   },
   signInButton: {
     backgroundColor: '#000',
     height: 50,
     borderRadius: 8,
-    flexDirection:'row',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 25,
@@ -499,7 +501,7 @@ const styles = StyleSheet.create({
   signInButtonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'Nunito_700Bold', // Updated with fontFamily
   },
   dividerContainer: {
     flexDirection: 'row',
@@ -515,6 +517,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     color: '#666',
     fontSize: 14,
+    fontFamily: 'Nunito_400Regular', // Updated with fontFamily
   },
   googleSignInButton: {
     flexDirection: 'row',
@@ -543,12 +546,12 @@ const styles = StyleSheet.create({
   googleIconPlaceholderText: {
     color: '#4285F4',
     fontSize: 14,
-    fontWeight: '700',
+    fontFamily: 'Nunito_700Bold', // Updated with fontFamily
   },
   googleSignInText: {
     fontSize: 16,
     color: '#333',
-    fontWeight: '700',
+    fontFamily: 'Nunito_700Bold', // Updated with fontFamily
   },
   signUpContainer: {
     flexDirection: 'row',
@@ -558,12 +561,13 @@ const styles = StyleSheet.create({
   notMemberText: {
     fontSize: 14,
     color: '#666',
+    fontFamily: 'Nunito_400Regular', // Updated with fontFamily
   },
   signUpText: {
     fontSize: 14,
     color: '#000',
     textDecorationLine: 'underline',
-    fontWeight: '700',
+    fontFamily: 'Nunito_700Bold', // Updated with fontFamily
   },
   disabledButton: {
     opacity: 0.7,

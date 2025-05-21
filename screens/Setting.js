@@ -18,21 +18,28 @@ import { StorageContext } from '../contexts/StorageContext';
 import http from '../services/http';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Toast } from 'toastify-react-native';
+import CustomText from './Components/CustomText'; // Make sure this path is correct
 
 // Get initial dimensions
 const { width, height } = Dimensions.get('window');
 
-const SettingScreen = ({ navigation }) => {
+const Setting = ({ navigation }) => {
   const { userDetail, setUserDetail } = useContext(StorageContext);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const modalScale = useRef(new Animated.Value(0)).current;
   const modalOpacity = useRef(new Animated.Value(0)).current;
   const [screenDimensions, setScreenDimensions] = useState({ width, height });
+  const [headerHeight, setHeaderHeight] = useState(Platform.OS === 'ios' ? 90 : 70);
 
   // Add listener for dimension changes
   useEffect(() => {
     const dimensionSubscription = Dimensions.addEventListener('change', ({ window }) => {
       setScreenDimensions({ width: window.width, height: window.height });
+      // Adjust header height based on orientation
+      const isPortrait = window.height > window.width;
+      setHeaderHeight(isPortrait ? 
+        (Platform.OS === 'ios' ? 90 : 70) : 
+        (Platform.OS === 'ios' ? 60 : 50));
     });
 
     return () => {
@@ -95,7 +102,6 @@ const SettingScreen = ({ navigation }) => {
       const response = await http.post('delete-account');
 
       if (response.data.status) {
-
         // Clear user state
         setUserDetail(null);
 
@@ -136,7 +142,10 @@ const SettingScreen = ({ navigation }) => {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      <View style={[styles.header, { paddingTop: Platform.OS === 'ios' ? 40 : 10 }]}>
+      <View style={[styles.header, { 
+        height: headerHeight,
+        paddingTop: Platform.OS === 'ios' ? headerHeight * 0.4 : headerHeight * 0.2 
+      }]}>
         <TouchableOpacity
           onPress={() => navigation.pop()}
           style={[styles.backButton, { zIndex: 10 }]}
@@ -144,7 +153,14 @@ const SettingScreen = ({ navigation }) => {
         >
           <Ionicons name="chevron-back" size={25} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Setting</Text>
+        <CustomText 
+          style={styles.headerTitle}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.8}
+        >
+          Setting
+        </CustomText>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -159,7 +175,7 @@ const SettingScreen = ({ navigation }) => {
                 source={require('../assets/icons/ic_app_language.png')}
                 style={styles.settingIcon}
               />
-              <Text style={styles.settingName}>Language</Text>
+              <CustomText style={styles.settingName}>Language</CustomText>
             </View>
           </TouchableOpacity>
 
@@ -173,7 +189,7 @@ const SettingScreen = ({ navigation }) => {
                 source={require('../assets/icons/ic_app_language.png')}
                 style={styles.settingIcon}
               />
-              <Text style={styles.settingName}>Country</Text>
+              <CustomText style={styles.settingName}>Country</CustomText>
             </View>
           </TouchableOpacity>
 
@@ -187,7 +203,7 @@ const SettingScreen = ({ navigation }) => {
                 source={require('../assets/icons/ic_lock.png')}
                 style={styles.settingIcon}
               />
-              <Text style={styles.settingName}>Change Password</Text>
+              <CustomText style={styles.settingName}>Change Password</CustomText>
             </View>
           </TouchableOpacity>
 
@@ -201,7 +217,7 @@ const SettingScreen = ({ navigation }) => {
                 source={require('../assets/icons/ic_delete_account.png')}
                 style={styles.settingIcon}
               />
-              <Text style={styles.settingName}>Delete Account</Text>
+              <CustomText style={styles.settingName}>Delete Account</CustomText>
             </View>
           </TouchableOpacity>
         </View>
@@ -250,22 +266,22 @@ const SettingScreen = ({ navigation }) => {
                   />
                 </View>
 
-                <Text style={styles.modalWarning}>
+                <CustomText style={styles.modalWarning}>
                   Your data will not be able to be restored after the deletion!
-                </Text>
+                </CustomText>
 
                 <View style={styles.modalButtons}>
                   <TouchableOpacity
                     style={[styles.modalButton, styles.cancelButton]}
                     onPress={closeDeleteModal}
                   >
-                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                    <CustomText style={styles.cancelButtonText}>Cancel</CustomText>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[styles.modalButton, styles.deleteButton]}
                     onPress={confirmDeleteAccount}
                   >
-                    <Text style={styles.deleteButtonText}>Delete</Text>
+                    <CustomText style={styles.deleteButtonText}>Delete</CustomText>
                   </TouchableOpacity>
                 </View>
               </Animated.View>
@@ -286,28 +302,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 15,
-    paddingBottom: 20,
-    height: height * 0.11,
+    paddingBottom: 15,
     backgroundColor: '#000',
     borderBottomLeftRadius: 17,
     borderBottomRightRadius: 17,
-    zIndex: 1
+    zIndex: 1,
+    position: 'relative'
   },
   backButton: {
     width: 40,
     height: 40,
     justifyContent: 'center',
-    marginTop: 27,
+    alignItems: 'center',
+    position: 'absolute',
+    left: 15,
+    bottom: 15
   },
   headerTitle: {
     fontSize: 18,
     color: '#fff',
     flex: 1,
     textAlign: 'center',
-    marginTop: 20,
-    marginLeft: -30,
     fontWeight: 'bold',
+    paddingHorizontal: 40, // Ensure space for back button
+    marginTop: Platform.OS === 'ios' ? 10 : 5,
+    fontFamily: 'Nunito_800ExtraBold' // Added font family
   },
   content: {
     flex: 1,
@@ -336,7 +355,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#333',
     marginLeft: 12,
-    fontWeight: 'bold',
+    fontFamily: 'Nunito_600SemiBold' // Added font family
   },
   profileContain: {
     width: 100,
@@ -377,7 +396,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     color: '#333',
     alignSelf: 'flex-start',
-    fontWeight: 'bold',
+    fontFamily: 'Nunito_800ExtraBold',
   },
   modalContent: {
     width: '100%',
@@ -390,6 +409,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#555',
     paddingVertical: 8,
+    fontFamily: 'Nunito_400Regular',
   },
   modalWarning: {
     fontSize: 14,
@@ -397,6 +417,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
     marginTop: 30,
+    fontFamily: 'Nunito_600SemiBold' // Added font family
   },
   modalButtons: {
     flexDirection: 'row',
@@ -429,13 +450,13 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: '#333',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Nunito_600SemiBold' // Added font family
   },
   deleteButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Nunito_600SemiBold' // Added font family
   },
 });
 
-export default SettingScreen;
+export default Setting;

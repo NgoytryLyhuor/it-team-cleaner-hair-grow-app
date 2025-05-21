@@ -1,6 +1,13 @@
 import React from 'react';
-import { View, Text, Image, Dimensions, Pressable } from 'react-native';
+import { 
+  View, 
+  StyleSheet, 
+  Dimensions, 
+  Pressable 
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import CustomText from './CustomText';
+import { Image } from 'expo-image';
 
 const screenWidth = Dimensions.get('window').width;
 const boxSize = (screenWidth - 70) / 3;
@@ -13,42 +20,84 @@ const dashboard_menu_inquiry = require('../../assets/icons/dashboard_menu_inquir
 const dashboard_menu_notifications = require('../../assets/icons/dashboard_menu_notifications.png');
 
 const menuItems = [
-  { id: '1', title: 'Points', icon: 'star', image: dashboard_menu_points, action: 'Points' },
-  { id: '2', title: 'Referral', icon: 'envelope', image: dashboard_menu_referral, action: 'Referral' },
-  { id: '3', title: 'Coupon', icon: 'gift', image: dashboard_menu_coupon, action: 'Coupon' },
-  { id: '4', title: 'Product', icon: 'store', image: dashboard_menu_fbecsite, action: 'Shop' },
-  { id: '5', title: 'Inquiry', icon: 'comments', image: dashboard_menu_inquiry, action: 'Inquiry' },
-  { id: '6', title: 'Notifications', icon: 'bell', image: dashboard_menu_notifications, action: 'Notifications' }
+  { id: '1', title: 'Points', image: dashboard_menu_points, action: 'Points' },
+  { id: '2', title: 'Referral', image: dashboard_menu_referral, action: 'Referral' },
+  { id: '3', title: 'Coupon', image: dashboard_menu_coupon, action: 'Coupon' },
+  { id: '4', title: 'Product', image: dashboard_menu_fbecsite, action: 'Shop' },
+  { id: '5', title: 'Inquiry', image: dashboard_menu_inquiry, action: 'Inquiry' },
+  { id: '6', title: 'Notifications', image: dashboard_menu_notifications, action: 'Notifications' }
 ];
 
 const IconGrid = ({ openModal }) => {
-
   const navigation = useNavigation();
 
   return (
-    <View className="px-5 pt-5 height-[50px]">
-      <View className="flex-row flex-wrap justify-between">
+    <View style={styles.container}>
+      <View style={styles.gridContainer}>
         {menuItems.map((item) => (
           <Pressable
             onPress={
               item.action === 'Inquiry'
-                ? () => openModal()
-                : () => navigation.navigate(item.action, {})
+                ? openModal
+                : () => navigation.navigate(item.action)
             }
             key={item.id}
-            className="shadow mb-4 bg-white rounded-xl justify-center items-center border border-gray-100"
-            style={{
-              width: boxSize,
-              height: 100,
-            }}
+            style={styles.menuItem}
           >
-            <Image className="w-12 h-12 mb-1" source={item.image} />
-            <Text className="text-[14px] font-medium">{item.title}</Text>
+            <Image 
+              style={styles.menuIcon} 
+              source={item.image} 
+              contentFit="contain"
+            />
+            <CustomText style={styles.menuText}>
+              {item.title}
+            </CustomText>
           </Pressable>
         ))}
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  menuItem: {
+    width: boxSize,
+    height: 100,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#f0f0f0',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  menuIcon: {
+    width: 48,
+    height: 48,
+    marginBottom: 8,
+  },
+  menuText: {
+    fontSize: 14,
+    fontFamily: 'Nunito_600SemiBold',
+    color: '#333',
+  },
+});
 
 export default IconGrid;

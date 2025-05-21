@@ -23,7 +23,7 @@ import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import defaultProfileImage from '../assets/walk_img_1.png';
 import CustomText from './Components/CustomText';
-import { StorageContext, } from '../contexts/StorageContext';
+import { StorageContext } from '../contexts/StorageContext';
 import { Toast } from 'toastify-react-native';
 const { height } = Dimensions.get('window');
 
@@ -99,10 +99,7 @@ const FloatingLabelInput = ({
             outputRange: [0, 5]
         }),
         zIndex: 1,
-        fontWeight: animatedIsFocused.interpolate({
-            inputRange: [0, 1],
-            outputRange: ['400', '500']
-        }),
+        fontFamily: 'Nunito_400Regular',
     };
 
     return (
@@ -140,7 +137,6 @@ const FloatingLabelInput = ({
 
 const EditProfileScreen = ({ navigation }) => {
     const { userDetail, setUserDetail } = useContext(StorageContext);
-    // console.log(userDetail)
     const [firstName, setFirstName] = useState(userDetail?.first_name);
     const [lastName, setLastName] = useState(userDetail?.last_name);
     const [gender, setGender] = useState(userDetail?.gender);
@@ -164,7 +160,7 @@ const EditProfileScreen = ({ navigation }) => {
 
         const date = new Date(rawDate);
         const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
 
         return `${day}/${month}/${year}`;
@@ -190,32 +186,22 @@ const EditProfileScreen = ({ navigation }) => {
         setLoading(true);
 
         try {
-            // Create form data for multipart/form-data request
             const formData = new FormData();
-
-            // Add text fields
             formData.append('first_name', firstName);
             formData.append('last_name', lastName);
             formData.append('date_of_birth', formatDate(dateOfBirth));
             formData.append('gender', gender);
             formData.append('email', email);
 
-            // Add profile image if it has been changed
-            // Check if the profileImage is different from the original user profile image
             if (profileImage && profileImage !== userDetail?.profile_image) {
-                // Check if profileImage is a local URI (new image selected)
                 if (profileImage.startsWith('file://') || profileImage.startsWith('content://')) {
-                    // Get file name from URI
                     const fileName = profileImage.split('/').pop();
-
-                    // Determine file type
                     const fileType = fileName.endsWith('.png')
                         ? 'image/png'
                         : fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')
                             ? 'image/jpeg'
                             : 'image/jpg';
 
-                    // Append the image to form data
                     formData.append('profile_image', {
                         uri: profileImage,
                         name: fileName,
@@ -224,7 +210,6 @@ const EditProfileScreen = ({ navigation }) => {
                 }
             }
 
-            // Make the request with form data
             const res = await http.post('update-profile', formData);
 
             if (res.data.status) {
@@ -233,13 +218,7 @@ const EditProfileScreen = ({ navigation }) => {
             }
         } catch (error) {
             Toast.error('Something went wrong! Please try again.');
-            if (error.response) {
-                console.error('Server responded with:', error.response.data);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error message:', error.message);
-            }
+            console.error('Error updating profile:', error);
         } finally {
             setLoading(false);
         }
@@ -307,7 +286,6 @@ const EditProfileScreen = ({ navigation }) => {
     };
 
     const handleDateChange = (event, selectedDate) => {
-        console.log(selectedDate)
         setShowDatePicker(Platform.OS === 'ios');
         if (selectedDate) {
             const formattedDate = `${selectedDate.getDate().toString().padStart(2, '0')}/${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}/${selectedDate.getFullYear()}`;
@@ -343,33 +321,26 @@ const EditProfileScreen = ({ navigation }) => {
                     style={[styles.backButton, { zIndex: 10 }]}
                     activeOpacity={0.7}
                 >
-                    <Ionicons
-                        name="chevron-back"
-                        size={25}
-                        color="#fff"
-                    />
+                    <Ionicons name="chevron-back" size={25} color="#fff" />
                 </TouchableOpacity>
                 <CustomText style={styles.headerTitle}>Edit Profile</CustomText>
             </View>
 
             <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
                 <View style={styles.profileImageContainer}>
-                    <View style={styles.profileImageContainer}>
-                        <View style={styles.profileImageWrapper}>
-                            {profileImage ? (
-                                <Image source={{ uri: profileImage }} style={styles.profileImage} />
-                            ) : (
-                                <Image source={defaultProfileImage} style={styles.profileImage} />
-                            )}
-                            <TouchableOpacity
-                                style={styles.cameraButton}
-                                onPress={openImagePickerModal}
-                            >
-                                <Ionicons name="camera" size={20} color="#fff" />
-                            </TouchableOpacity>
-                        </View>
+                    <View style={styles.profileImageWrapper}>
+                        {profileImage ? (
+                            <Image source={{ uri: profileImage }} style={styles.profileImage} />
+                        ) : (
+                            <Image source={defaultProfileImage} style={styles.profileImage} />
+                        )}
+                        <TouchableOpacity
+                            style={styles.cameraButton}
+                            onPress={openImagePickerModal}
+                        >
+                            <Ionicons name="camera" size={20} color="#fff" />
+                        </TouchableOpacity>
                     </View>
-
                 </View>
 
                 <View style={styles.inputContainer}>
@@ -406,7 +377,7 @@ const EditProfileScreen = ({ navigation }) => {
                                     onPress={() => setGender(option)}
                                 >
                                     <View style={styles.radioCircle}>
-                                        {gender.charAt(0).toUpperCase() + gender.slice(1).toLowerCase() === option && <View style={styles.radioChecked} />}
+                                        {gender?.charAt(0)?.toUpperCase() + gender?.slice(1)?.toLowerCase() === option && <View style={styles.radioChecked} />}
                                     </View>
                                     <CustomText style={styles.radioLabel}>{option}</CustomText>
                                 </TouchableOpacity>
@@ -448,8 +419,8 @@ const EditProfileScreen = ({ navigation }) => {
                     >
                         {loading ? (
                             <>
-                                <ActivityIndicator color="#fff" size="small" className="mr-2" />
-                                <Text className="text-white text-center font-bold text-lg">Processing...</Text>
+                                <ActivityIndicator color="#fff" size="small" style={{ marginRight: 8 }} />
+                                <CustomText style={styles.updateButtonText}>Processing...</CustomText>
                             </>
                         ) : (
                             <CustomText style={styles.updateButtonText}>Update</CustomText>
@@ -460,18 +431,12 @@ const EditProfileScreen = ({ navigation }) => {
 
             {showDatePicker && (
                 <DateTimePicker
-                    value={
-                        (() => {
-                            const [day, month, year] = dateOfBirth.split('/');
-                            return new Date(`${year}-${month}-${day}`);
-                        })()
-                    }
+                    value={new Date(formatDate(dateOfBirth))}
                     mode="date"
                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                     onChange={handleDateChange}
                     maximumDate={new Date()}
                 />
-
             )}
 
             <Modal
@@ -525,6 +490,7 @@ const EditProfileScreen = ({ navigation }) => {
                             value={searchQuery}
                             onChangeText={setSearchQuery}
                             autoFocus={true}
+                            placeholderTextColor="#888"
                         />
                     </View>
 
@@ -581,7 +547,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 20,
         marginLeft: -30,
-        fontFamily: 'Nunito-ExtraBold',
+        fontFamily: 'Nunito_800ExtraBold',
     },
     content: {
         flex: 1,
@@ -599,19 +565,6 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 50,
-    },
-    profileImagePlaceholder: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        backgroundColor: '#C7C7C7',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    profileImageText: {
-        fontSize: 30,
-        color: '#fff',
-        fontFamily: 'Nunito-Bold',
     },
     cameraButton: {
         position: 'absolute',
@@ -638,10 +591,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 15,
         borderWidth: 1,
-        borderColor: '#fff',
+        borderColor: '#C7C7C7',
         height: 50,
         paddingTop: 3,
-        borderColor: '#C7C7C7'
     },
     inputWrapperError: {
         borderColor: '#FF4A4A',
@@ -654,7 +606,7 @@ const styles = StyleSheet.create({
         height: 50,
         fontSize: 13,
         paddingTop: 5,
-        fontFamily: 'Nunito-Bold',
+        fontFamily: 'Nunito_600SemiBold',
     },
     eyeIcon: {
         padding: 10,
@@ -665,7 +617,7 @@ const styles = StyleSheet.create({
         marginTop: -10,
         marginBottom: 10,
         marginLeft: 5,
-        fontFamily: 'Nunito-Bold',
+        fontFamily: 'Nunito_600SemiBold',
     },
     genderContainer: {
         marginBottom: 15,
@@ -674,7 +626,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: '#888',
         marginBottom: 8,
-        fontFamily: 'Nunito-Bold',
+        fontFamily: 'Nunito_600SemiBold',
     },
     radioRow: {
         flexDirection: 'row',
@@ -706,7 +658,7 @@ const styles = StyleSheet.create({
     radioLabel: {
         fontSize: 14,
         color: '#000',
-        fontFamily: 'Nunito-Bold',
+        fontFamily: 'Nunito_600SemiBold',
     },
     footer: {
         marginTop: 20,
@@ -723,7 +675,7 @@ const styles = StyleSheet.create({
     updateButtonText: {
         color: '#fff',
         fontSize: 16,
-        fontFamily: 'Nunito-ExtraBold',
+        fontFamily: 'Nunito_700Bold',
     },
     modalOverlay: {
         flex: 1,
@@ -748,7 +700,7 @@ const styles = StyleSheet.create({
     },
     modalOptionText: {
         color: '#000',
-        fontFamily: 'Nunito-Bold',
+        fontFamily: 'Nunito_600SemiBold',
         marginLeft: 10,
         marginTop: -3,
         fontSize: 16
@@ -780,6 +732,7 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 50,
         fontSize: 16,
+        fontFamily: 'Nunito_400Regular',
     },
     countryList: {
         flex: 1,
@@ -794,6 +747,7 @@ const styles = StyleSheet.create({
     countryName: {
         fontSize: 16,
         color: '#000',
+        fontFamily: 'Nunito_400Regular',
     },
     countrySeparator: {
         height: 1,

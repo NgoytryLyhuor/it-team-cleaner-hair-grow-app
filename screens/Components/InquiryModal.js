@@ -14,7 +14,7 @@ import React, { useState } from 'react';
 const { width } = Dimensions.get('window');
 
 const InquiryModal = ({ modalVisible, closeModal, socialMedia, appCountry }) => {
-  const [selectedApp, setSelectedApp] = useState(null); // 'telegram' | 'facebook'
+  const [selectedApp, setSelectedApp] = useState(null);
 
   const handleSelect = () => {
     if (!selectedApp || !socialMedia) {
@@ -66,11 +66,11 @@ const InquiryModal = ({ modalVisible, closeModal, socialMedia, appCountry }) => 
                 className="bg-white rounded-2xl overflow-hidden"
                 style={{ width: width * 0.8 }}
               >
-                <Text className="text-xl text-black font-extrabold bg-gray-100 px-5 py-3">
+                <Text style={{ fontFamily: 'Nunito_800ExtraBold' }} className="text-xl text-black bg-gray-100 px-5 py-3">
                   Inquiry
                 </Text>
 
-                <Text className="py-3 px-5">
+                <Text style={{ fontFamily: 'Nunito_400Regular' }} className="py-3 px-5">
                   Please select the app you want to chat with us.
                 </Text>
 
@@ -88,9 +88,8 @@ const InquiryModal = ({ modalVisible, closeModal, socialMedia, appCountry }) => 
                         className="h-full"
                         source={require('../../assets/icons/ic_zalo.png')}
                       />
-                      <Text className=" font-extrabold mt-1">Zalo</Text>
+                      <Text style={{ fontFamily: 'Nunito_700Bold' }} className="mt-1">Zalo</Text>
                     </View>
-
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -106,7 +105,7 @@ const InquiryModal = ({ modalVisible, closeModal, socialMedia, appCountry }) => 
                         className="h-full"
                         source={require('../../assets/icons/ic_telegram.png')}
                       />
-                      <Text className=" font-extrabold mt-1">Telegram</Text>
+                      <Text style={{ fontFamily: 'Nunito_700Bold' }} className="mt-1">Telegram</Text>
                     </View>
                   </TouchableOpacity>
 
@@ -122,7 +121,7 @@ const InquiryModal = ({ modalVisible, closeModal, socialMedia, appCountry }) => 
                         className="h-full"
                         source={require('../../assets/icons/ic_facebook_colored.png')}
                       />
-                      <Text className=" font-extrabold mt-1">Facebook</Text>
+                      <Text style={{ fontFamily: 'Nunito_700Bold' }} className="mt-1">Facebook</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -135,7 +134,8 @@ const InquiryModal = ({ modalVisible, closeModal, socialMedia, appCountry }) => 
                   accessibilityLabel="Confirm Selection"
                 >
                   <Text
-                    className={`text-center font-semibold ${selectedApp === null ? 'text-black' : 'text-white'
+                    style={{ fontFamily: 'Nunito_600SemiBold' }}
+                    className={`text-center ${selectedApp === null ? 'text-black' : 'text-white'
                       }`}
                   >
                     Select

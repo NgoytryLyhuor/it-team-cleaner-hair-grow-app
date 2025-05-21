@@ -5,13 +5,16 @@ import {
   Text,
   SafeAreaView,
   StatusBar,
+  StyleSheet,
   Image,
   ScrollView,
   TouchableOpacity,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import BottomNavigation from './Components/BottomNavigation';
 import apiWordpress from '../services/api_wordpress';
+import CustomText from './Components/CustomText';
 
 const { height } = Dimensions.get("window");
 
@@ -55,12 +58,12 @@ export default function Shop({ navigation }) {
       }
       return rows;
     }, []).map((pair, rowIndex) => (
-      <View key={rowIndex} className="flex flex-row justify-between mb-4">
+      <View key={rowIndex} style={styles.row}>
         {pair.map((_, i) => (
-          <View key={i} className="w-[48%] bg-gray-200 rounded-xl overflow-hidden">
-            <View className="w-full h-[200px] bg-gray-300 animate-pulse" />
-            <View className="p-3">
-              <View className="h-4 bg-gray-300 rounded w-3/4 mx-auto animate-pulse" />
+          <View key={i} style={styles.skeletonItem}>
+            <View style={styles.skeletonImage} />
+            <View style={styles.skeletonTextContainer}>
+              <View style={styles.skeletonText} />
             </View>
           </View>
         ))}
@@ -69,21 +72,17 @@ export default function Shop({ navigation }) {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#000" />
       {/* Fixed Header */}
-      <View
-        className="z-10 bg-black rounded-b-[30px] flex-row justify-center items-center px-5 pb-5"
-        style={{ height: height * 0.12, paddingTop: 25 }}
-      >
-        <Text className="text-white font-extrabold text-[17px] text-center">Shop</Text>
+      <View style={styles.header}>
+        <CustomText style={styles.headerTitle}>Shop</CustomText>
       </View>
 
       {/* Scrollable Content */}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{ marginBottom: height * 0.1 }}
-        
+        style={styles.scrollView}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -93,23 +92,22 @@ export default function Shop({ navigation }) {
           />
         }
       >
-        <SafeAreaView className='pb-5'>
-
+        <SafeAreaView style={styles.safeArea}>
           {/* Products */}
-          <View className="px-4 mt-5">
+          <View style={styles.productsContainer}>
             {loading ? (
               renderSkeletonLoader()
             ) : dashboardDetail.length === 0 ? (
-              <View className="flex-1 justify-center items-center py-10">
-                <Text className="text-gray-500 mb-4">No products found</Text>
+              <View style={styles.emptyContainer}>
+                <CustomText style={styles.emptyText}>No products found</CustomText>
                 <TouchableOpacity
-                  className="bg-black px-6 py-3 rounded-lg"
+                  style={styles.retryButton}
                   onPress={() => {
                     setLoading(true);
                     fetchData();
                   }}
                 >
-                  <Text className="text-white">Retry</Text>
+                  <CustomText style={styles.retryButtonText}>Retry</CustomText>
                 </TouchableOpacity>
               </View>
             ) : (
@@ -119,15 +117,15 @@ export default function Shop({ navigation }) {
                 }
                 return rows;
               }, []).map((pair, rowIndex) => (
-                <View key={rowIndex} className="flex flex-row justify-between mb-4">
+                <View key={rowIndex} style={styles.row}>
                   {pair.map((item) => (
                     <TouchableOpacity
                       key={item.id}
-                      className="w-[48%] bg-white rounded-xl shadow-md overflow-hidden"
+                      style={styles.productItem}
                       onPress={() => navigation.navigate('ProductDetail', { product: item })}
                     >
                       <Image
-                        className="w-full h-[200px] bg-gray-100"
+                        style={styles.productImage}
                         resizeMode="cover"
                         source={
                           item.image
@@ -135,12 +133,14 @@ export default function Shop({ navigation }) {
                             : require('../assets/icons/n_image.jpg')
                         }
                       />
-                      <View className="p-3">
-                        <Text className="text-center font-bold text-black">{item.text}</Text>
+                      <View style={styles.productTextContainer}>
+                        <CustomText style={styles.productTitle} numberOfLines={1}>
+                          {item.text}
+                        </CustomText>
                       </View>
                     </TouchableOpacity>
                   ))}
-                  {pair.length === 1 && <View className="w-[48%]" />}
+                  {pair.length === 1 && <View style={styles.emptySpace} />}
                 </View>
               ))
             )}
@@ -152,3 +152,114 @@ export default function Shop({ navigation }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    zIndex: 10,
+    backgroundColor: '#000',
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    height: height * 0.12,
+    paddingTop: 25,
+  },
+  headerTitle: {
+    color: '#fff',
+    fontFamily: 'Nunito_800ExtraBold',
+    fontSize: 17,
+    textAlign: 'center',
+  },
+  scrollView: {
+    marginBottom: height * 0.1,
+  },
+  safeArea: {
+    paddingBottom: 20,
+  },
+  productsContainer: {
+    paddingHorizontal: 16,
+    marginTop: 20,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  skeletonItem: {
+    width: '48%',
+    backgroundColor: '#f2f2f2',
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  skeletonImage: {
+    width: '100%',
+    height: 200,
+    backgroundColor: '#e5e5e5',
+  },
+  skeletonTextContainer: {
+    padding: 12,
+  },
+  skeletonText: {
+    height: 16,
+    backgroundColor: '#e5e5e5',
+    borderRadius: 8,
+    width: '75%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  emptyText: {
+    color: '#666',
+    marginBottom: 16,
+    fontFamily: 'Nunito_400Regular',
+  },
+  retryButton: {
+    backgroundColor: '#000',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontFamily: 'Nunito_600SemiBold',
+  },
+  productItem: {
+    width: '48%',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    overflow: 'hidden',
+  },
+  productImage: {
+    width: '100%',
+    height: 200,
+    backgroundColor: '#f5f5f5',
+  },
+  productTextContainer: {
+    padding: 12,
+  },
+  productTitle: {
+    textAlign: 'center',
+    fontFamily: 'Nunito_700Bold',
+    color: '#000',
+  },
+  emptySpace: {
+    width: '48%',
+  },
+});

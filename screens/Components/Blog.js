@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, ScrollView, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // ✅ Import
-
+import { 
+  View, 
+  Image, 
+  ScrollView, 
+  Text, 
+  TouchableOpacity, 
+  ActivityIndicator 
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import apiWordpress from '../../services/api_wordpress';
 
 export default function Blog() {
   const [loading, setLoading] = useState(false);
   const [dashboardDetail, setDashboardDetail] = useState([]);
-  const navigation = useNavigation(); // ✅ Hook inside screen
+  const navigation = useNavigation();
 
   const fetchData = async () => {
     setLoading(true);
@@ -48,7 +54,7 @@ export default function Blog() {
           onError={() => setImageError(true)}
         />
         <View className="p-3">
-          <Text className="text-sm font-semibold text-black text-center">
+          <Text style={{ fontFamily: 'Nunito_600SemiBold' }} className="text-sm text-black text-center">
             {item?.header || 'No Title'}
           </Text>
         </View>
@@ -59,9 +65,9 @@ export default function Blog() {
   return (
     <View className="px-5 py-4">
       <View className="flex-row justify-between items-center mb-2">
-        <Text className="text-xl font-extrabold text-black">Blog</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Shop')} >
-          <Text className="text-blue-500 underline">View All</Text>
+        <Text style={{ fontFamily: 'Nunito_800ExtraBold' }} className="text-xl text-black">Blog</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Shop')}>
+          <Text style={{ fontFamily: 'Nunito_600SemiBold' }} className="text-blue-500 underline">View All</Text>
         </TouchableOpacity>
       </View>
 
@@ -69,10 +75,10 @@ export default function Blog() {
         <ActivityIndicator size="large" color="#000" />
       ) : (
         <ScrollView
-         horizontal 
-         showsHorizontalScrollIndicator={false}
-         contentContainerStyle={{paddingVertical:5}}
-         >
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingVertical: 5 }}
+        >
           {dashboardDetail.map((blogItem) => (
             <BlogItem key={blogItem.id} item={blogItem} />
           ))}
