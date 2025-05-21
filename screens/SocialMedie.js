@@ -1,0 +1,81 @@
+import React, { useContext } from 'react';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StatusBar,
+  TouchableOpacity,
+  ScrollView,
+  Linking,
+  Image
+} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { GlobalDataContext } from '../contexts/GlobalDataContext';
+
+export default function SocialMedie({ navigation }) {
+  const { socialMedia } = useContext(GlobalDataContext);
+  // console.log(socialMedia.facebook_link)
+  
+  return (
+    <View className="flex-1 bg-gray-100">
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <SafeAreaView className="pb-5">
+          <StatusBar barStyle="light-content" backgroundColor="#000" />
+
+          {/* Header */}
+          <View className="h-[70px] bg-black rounded-b-[20px] flex-row justify-center items-center px-5">
+            <Text
+              className="absolute left-5"
+              onPress={() => navigation.goBack()}
+            >
+              <Icon name="arrow-back-ios" size={22} color="#fff" />
+            </Text>
+            <Text className="text-white font-extrabold text-[17px] text-center">
+              Social Media
+            </Text>
+          </View>
+
+          {/* Settings List */}
+          <View className="p-4 space-y-4">
+            <SettingItem
+              title="Facebook"
+              img={require('../assets/icons/ic_facebook_colored.png')}
+              url={socialMedia?.facebook_link}
+            />
+            <SettingItem
+              title="Instagram"
+              img={require('../assets/icons/ic_instagram_colored.png')}
+              url={socialMedia?.instagram_link}
+            />
+          </View>
+        </SafeAreaView>
+      </ScrollView>
+    </View>
+  );
+}
+
+function SettingItem({title, url , img }) {
+
+  const handlePress = () => {
+    console.log(url)
+    if (url) {
+      Linking.openURL(url).catch(err => {
+        console.warn('Failed to open URL:', err);
+      });
+    }
+  };
+
+  return (
+    <TouchableOpacity
+      onPress={handlePress}
+      className="bg-white p-4 rounded-xl shadow border border-gray-100 mb-3"
+    >
+      <View className="flex-row space-x-4 items-center">
+        <Image className=" w-5 h-5" source={img}/>
+        <View className="flex-1 ml-2">
+          <Text className="font-semibold text-base">{title}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+}
