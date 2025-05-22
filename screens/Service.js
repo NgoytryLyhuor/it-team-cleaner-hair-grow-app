@@ -56,11 +56,11 @@ export default function Service({ navigation, route }) {
   // Only rotate animations for chevron - no movement
   const rotate = {
     0: { rotate: '0deg' },
-    1: { rotate: '160deg' }
+    1: { rotate: '0deg' }
   };
   
   const rotateBack = {
-    0: { rotate: '90deg' },
+    0: { rotate: '60deg' },
     1: { rotate: '0deg' }
   };
 
@@ -160,7 +160,7 @@ export default function Service({ navigation, route }) {
   const renderHeader = (section, index, isActive) => {
     return (
       <View style={styles.categoryHeader}>
-        <Text style={styles.categoryName}>
+        <Text style={styles.categoryName} className="flex-1">
           {section?.category?.name || "Untitled Category"}
         </Text>
 
@@ -169,7 +169,7 @@ export default function Service({ navigation, route }) {
           animation={isActive ? rotate : rotateBack}
           useNativeDriver={true}
         >
-          <Ionicons name={isActive ? 'chevron-up' : 'chevron-down'} size={15} color="#333" />
+          <Ionicons name={isActive ? 'chevron-up' : 'chevron-down'} size={17} color="#333" />
         </Animatable.View>
       </View>
     );
@@ -197,7 +197,7 @@ export default function Service({ navigation, route }) {
               activeOpacity={0.7}
               style={styles.serviceHeader}
             >
-              <View style={styles.serviceBox}>
+              <View style={styles.serviceBox} className="gap-1">
                 <View style={styles.serviceImageContainer}>
                   <Image 
                     style={styles.serviceImage} 
@@ -274,13 +274,13 @@ export default function Service({ navigation, route }) {
   // Loading Skeleton - Memoized to prevent re-renders
   const renderSkeletonCard = React.useMemo(() => () => (
     <View style={styles.skeletonCategoryContainer}>
-      {[...Array(3)].map((_, index) => (
+      {[...Array(20)].map((_, index) => (
         <View key={index} style={styles.skeletonCategory}>
           <View style={styles.skeletonCategoryHeader}>
             <View style={styles.skeletonCategoryName} />
             <View style={styles.skeletonChevronIcon} />
           </View>
-          <View style={styles.skeletonServicesContainer}>
+          {/* <View style={styles.skeletonServicesContainer}>
             {[...Array(2)].map((_, serviceIndex) => (
               <View key={serviceIndex} style={styles.skeletonServiceHeader}>
                 <View style={styles.skeletonServiceBox}>
@@ -295,7 +295,7 @@ export default function Service({ navigation, route }) {
                 <View style={styles.skeletonCheckbox} />
               </View>
             ))}
-          </View>
+          </View> */}
         </View>
       ))}
     </View>
@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   categoryName: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#333',
     fontWeight: 'bold',
   },
@@ -552,8 +552,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   checkbox: {
-    width: 22,
-    height: 22,
+    width: 20,
+    height: 20,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 4,

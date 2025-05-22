@@ -24,10 +24,9 @@ const { height } = Dimensions.get("window");
 const BranchSkeleton = () => {
   return (
     <View className="mb-4 bg-gray-100 rounded-xl overflow-hidden">
-      <View style={{ height: 150 }} className="w-full bg-gray-200" />
+      <View style={{ height: height * 0.2 }} className="w-full bg-gray-200" />
       <View className="p-5">
         <View className="h-6 w-3/4 bg-gray-200 rounded mb-2" />
-        <View className="h-4 w-1/2 bg-gray-200 rounded" />
       </View>
     </View>
   );
@@ -86,7 +85,6 @@ export default function Branch({ navigation, route }) {
         setError('No branches available');
       }
     } catch (error) {
-      console.error('Failed to load branches', error);
       setError('Failed to load branches');
       Toast.error('Failed to load branches');
     } finally {
@@ -121,7 +119,7 @@ export default function Branch({ navigation, route }) {
       <StatusBar barStyle="light-content" backgroundColor="#000" />
 
       {/* Header */}
-      <BookingStepHeader title="Choose Branch" height={height * 0.11}/>
+      <BookingStepHeader title="Choose Branch" height={height * 0.12}/>
 
       {/* Content */}
       {loading ? (
@@ -130,7 +128,7 @@ export default function Branch({ navigation, route }) {
           className="p-4"
           contentContainerStyle={{ paddingBottom: 110 }}
         >
-          {[...Array(5)].map((_, index) => (
+          {[...Array(6)].map((_, index) => (
             <BranchSkeleton key={`skeleton-${index}`} />
           ))}
         </ScrollView>
@@ -189,7 +187,7 @@ export default function Branch({ navigation, route }) {
                 }}
                 android_ripple={{ color: '#f1f1f1' }}
               >
-                <View style={{ height: 150 }} className="w-full">
+                <View style={{ height: height * 0.2 }} className="w-full">
                   <Image
                     style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
                     source={{ uri: branch.branch_image }}

@@ -14,12 +14,15 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Dimensions
 } from 'react-native';
 import http from '../services/http';
 import { Ionicons } from '@expo/vector-icons';
 import CustomText from './Components/CustomText';
 import { Toast } from 'toastify-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const { height } = Dimensions.get('window');
 
 const FloatingLabelInput = ({
   label,
@@ -265,6 +268,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
     borderBottomLeftRadius: 17,
     borderBottomRightRadius: 17,
+    height:height * 0.15,
   },
   backButton: {
     width: 40,

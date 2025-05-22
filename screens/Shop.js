@@ -10,7 +10,6 @@ import {
   ScrollView,
   TouchableOpacity,
   RefreshControl,
-  ActivityIndicator,
 } from 'react-native';
 import BottomNavigation from './Components/BottomNavigation';
 import apiWordpress from '../services/api_wordpress';
@@ -168,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingBottom: 20,
-    height: height * 0.12,
+    height: height * 0.15,
     paddingTop: 25,
   },
   headerTitle: {

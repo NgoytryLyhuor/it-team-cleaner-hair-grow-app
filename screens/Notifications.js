@@ -15,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { StorageContext } from '../contexts/StorageContext';
 import http from '../services/http';
 
-const { width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 const Notifications = ({ navigation }) => {
   const insets = useSafeAreaInsets();
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 15,
     paddingBottom: 20,
-    height: 95,
+    height: height * 0.15,
     backgroundColor: '#000',
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,

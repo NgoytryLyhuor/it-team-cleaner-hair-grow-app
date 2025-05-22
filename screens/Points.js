@@ -17,9 +17,9 @@ import CustomText from './Components/CustomText';
 import { StorageContext } from '../contexts/StorageContext';
 import http from '../services/http';
 
-const { width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
-const Points = ({ navigation, route }) => {
+const Points = ({ navigation }) => {
     const [refreshing, setRefreshing] = useState(false);
     const { userDetail } = useContext(StorageContext);
     const [activeTab, setActiveTab] = useState('History');
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 20,
         paddingVertical: 15,
-        height: 93,
+        height: height * 0.15,
         backgroundColor: '#000',
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,

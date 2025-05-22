@@ -317,14 +317,14 @@ const Mybooking = ({ navigation }) => {
           style={[
             styles.header, 
             { 
-              height: headerHeight,
+              height: height * 0.15,
               paddingTop: Platform.OS === 'ios' ? Math.max(insets.top, 10) : 10
             }
           ]}
         >
-          <View style={styles.headerInner}>
+          
             <CustomText style={styles.headerTitle}>My Booking</CustomText>
-          </View>
+          
         </View>
         
         <View style={styles.content}>
@@ -363,7 +363,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
     elevation: 8,
-    justifyContent: 'flex-end', // Align content to bottom
+    alignItems:'center',
+    justifyContent:'center',
     paddingBottom: 15,
   },
   headerInner: {

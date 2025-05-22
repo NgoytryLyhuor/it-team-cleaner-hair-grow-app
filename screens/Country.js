@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   header: {
-    height: height * 0.11,
+    height: height * 0.15,
     backgroundColor: '#000',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,

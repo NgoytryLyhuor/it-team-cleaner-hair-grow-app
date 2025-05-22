@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const { width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 const LanguageScreen = ({ navigation }) => {
 
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 15,
         paddingBottom: 20,
-        height: 95,
+        height: height  * 0.15,
         backgroundColor: '#000',
         borderBottomLeftRadius: 17,
         borderBottomRightRadius: 17,

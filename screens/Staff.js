@@ -30,7 +30,7 @@ const StaffSkeleton = () => {
   return (
     <View className="bg-white p-4 rounded-xl shadow-lg border border-gray-100 mb-3">
       <View className="flex-row justify-between items-center">
-        <View className="flex-row space-x-4 items-center flex-1">
+        <View className="flex-row space-x-4 items-center flex-1 gap-2">
           <View className="w-20 h-20 rounded-full bg-gray-200 mr-3" />
           <View className="flex-1">
             <View className="h-5 w-3/4 bg-gray-200 rounded mb-2" />

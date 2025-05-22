@@ -189,8 +189,8 @@ const CouponScreen = ({ navigation, route }) => {
 
       {/* Header */}
       <View
-        className="flex-row items-center px-5 pb-5 pt-4 h-[95px] bg-black rounded-b-[17px] z-10"
-        style={{ paddingTop: Platform.OS === 'ios' ? insets.top : 10 }}
+        className="flex-row items-center px-5 pb-5 pt-4 bg-black rounded-b-[17px] z-10"
+        style={{ paddingTop: Platform.OS === 'ios' ? insets.top : 10 , height : height * 0.15 }}
       >
         <TouchableOpacity className="w-10 h-10 justify-center mt-[27px]" onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={28} color="#fff" />

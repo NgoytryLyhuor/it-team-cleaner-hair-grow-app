@@ -167,7 +167,7 @@ const DateTime = ({ navigation, route }) => {
       };
       setSelectedDate(initialDate);
     }
-  }, [days]);
+  }, []);
 
   // Fetch availability when selectedDate changes
   useEffect(() => {
@@ -507,9 +507,10 @@ const DateTime = ({ navigation, route }) => {
 
   // Navigation button states
   const currentMonthToday = today.getMonth();
+  const nextToMonth = today.getMonth() + 1;
   const currentYearToday = today.getFullYear();
   const isPrevDisabled = currentMonth === currentMonthToday && currentYear === currentYearToday;
-  const isNextDisabled = currentMonth === 6 && currentYear === currentYearToday; // July
+  const isNextDisabled = currentMonth === nextToMonth && currentYear === currentYearToday; // July
 
   return (
     <View style={styles.container}>

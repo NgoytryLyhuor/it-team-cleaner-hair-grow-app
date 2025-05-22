@@ -12,8 +12,7 @@ const StorageProvider = ({ children }) => {
       try {
         // Step 1: Load cached user (for immediate access)
         const storedUser = await AsyncStorage.getItem('user');
-        const token = await AsyncStorage.getItem('token');
-        // console.log(token)
+        
         if (storedUser) {
           const data = JSON.parse(storedUser);
           getUserDetail(data);

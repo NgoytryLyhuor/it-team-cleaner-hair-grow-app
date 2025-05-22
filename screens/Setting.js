@@ -143,7 +143,7 @@ const Setting = ({ navigation }) => {
       <StatusBar barStyle="light-content" />
 
       <View style={[styles.header, { 
-        height: headerHeight,
+        height: height * 0.15,
         paddingTop: Platform.OS === 'ios' ? headerHeight * 0.4 : headerHeight * 0.2 
       }]}>
         <TouchableOpacity
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     left: 15,
-    bottom: 15
+    // bottom: height * 0.07
   },
   headerTitle: {
     fontSize: 18,

@@ -234,7 +234,7 @@ export default function BookingConfirmation({ navigation, route }) {
 
       <SafeAreaView style={styles.safeArea}>
         <StatusBar barStyle="light-content" backgroundColor="#000" />
-        <BookingStepHeader title="Confirm Booking" height={height * 0.11} />
+        <BookingStepHeader title="Confirm Booking" height={height * 0.15} />
       </SafeAreaView>
 
       <ScrollView
